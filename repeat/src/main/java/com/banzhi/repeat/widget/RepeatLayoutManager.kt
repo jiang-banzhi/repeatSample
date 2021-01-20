@@ -1,4 +1,4 @@
-package com.banzhi.repeat
+package com.banzhi.repeat.widget
 
 import android.graphics.PointF
 import android.util.Log
@@ -51,7 +51,7 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
     }
 
 
-    private fun setOrientation(@RecyclerView.Orientation orientation: Int) {
+    fun setOrientation(@RecyclerView.Orientation orientation: Int) {
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw IllegalArgumentException("invalid orientation:$orientation")
         }
@@ -78,6 +78,12 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
 
     private fun logChildCount(tag: String, recycler: RecyclerView.Recycler) {
         Log.e(tag, "childCount = $childCount -- scrapSize = ${recycler.scrapList.size}")
+        var sb = StringBuilder()
+        for (i in 0 until childCount) {
+            sb.append(getPosition(getChildAt(i)!!))
+            sb.append(",")
+        }
+        Log.e("positions===>", "$sb")
     }
 
     override fun onLayoutCompleted(state: RecyclerView.State?) {
@@ -188,7 +194,8 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
                     left = right - mOrientationHelper.getDecoratedMeasurement(itemView)
                 }
             }
-            Log.e("layout$mCurrentPosition", "left=>$left top=>$top right=>$right bottom=>$bottom ")
+            Log.e("position=>", "mCurrentPosition==>${mCurrentPosition - 1}  ")
+            Log.e("layout=>${mCurrentPosition - 1}", "left=>$left top=>$top right=>$right bottom=>$bottom ")
             layoutDecoratedWithMargins(itemView, left, top, right, bottom)
             if (isFillEnd) {
                 mFillAnchor += getOrientationWidth(itemView)
@@ -243,6 +250,7 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
         recycler: RecyclerView.Recycler,
         state: RecyclerView.State
     ): Int {
+        Log.e("fillScroll", "delta==>$delta  state==>${state.remainingScrollHorizontal}")
         return if (delta > 0) {
             fillEnd(delta, recycler, state)
         } else {
@@ -256,21 +264,23 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
         recycler: RecyclerView.Recycler,
         state: RecyclerView.State
     ): Int {
-        //如果anchorView结束的边减去移动的距离还是没出现在屏幕内那么就可以继续滚动，不填充view
+
         val anchorView = getChildAt(0)!!
         val anchorStart = mOrientationHelper.getDecoratedStart(anchorView)
         val anchorPosition = getPosition(anchorView)
+
+        //如果anchorView结束的边减去移动的距离还是没出现在屏幕内那么就可以继续滚动，不填充view
+        if (anchorStart - delta < mOrientationHelper.startAfterPadding) {
+            return delta
+        }
         if (!canLoop) {
-            if (anchorStart - delta < mOrientationHelper.startAfterPadding) {
-                return delta
-            }
             //如果 startPosition == 0 且startPosition的开始的边加上移动的距离大于等于Recyclerview的最小宽度或高度，就返回修正过后的移动距离
             if (anchorPosition == 0 && anchorStart - delta >= mOrientationHelper.startAfterPadding) {
                 return anchorStart - mOrientationHelper.startAfterPadding
             }
         }
         mFillAnchor = anchorStart
-
+        Log.e("fillStart", "mFillAnchor==>$mFillAnchor  anchorPosition==>$anchorPosition")
         if (canLoop) {
             mCurrentPosition = (anchorPosition - 1) % itemCount
             if (mCurrentPosition < 0) {
@@ -287,15 +297,16 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
         recycler: RecyclerView.Recycler,
         state: RecyclerView.State
     ): Int {
-        //如果anchorView结束的边减去移动的距离还是没出现在屏幕内那么就可以继续滚动，不填充view
+
         val anchorView = getChildAt(childCount - 1)!!
         val anchorEnd = mOrientationHelper.getDecoratedEnd(anchorView)
         val anchorPosition = getPosition(anchorView)
-        if (!canLoop) {
-            if (anchorEnd - delta > mOrientationHelper.endAfterPadding) {
-                return delta
-            }
 
+        //如果anchorView结束的边减去移动的距离还是没出现在屏幕内那么就可以继续滚动，不填充view
+        if (anchorEnd - delta > mOrientationHelper.endAfterPadding) {
+            return delta
+        }
+        if (!canLoop) {
             //如果 endPosition == itemCount - 1 且endView的结束的边减去移动的距离小于等于Recyclerview的最大宽度或高度，就返回修正过后的移动距离
             if (anchorPosition == state.itemCount - 1 && anchorEnd - delta <= mOrientationHelper.endAfterPadding) {
                 val diff = anchorEnd - mOrientationHelper.endAfterPadding
@@ -380,6 +391,7 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
     }
 
     override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
+        Log.e("bannerview", "$position<====$mPendingPosition")
         val linearSmoothScroller =
             LinearSmoothScroller(recyclerView.context)
         linearSmoothScroller.targetPosition = position
@@ -391,7 +403,9 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
             return null
         }
         val firstChildPos = getPosition(getChildAt(0)!!)
-        val direction = if (targetPosition < firstChildPos) -1 else 1
+        val direction = if (canLoop) 1 else {
+            if (targetPosition < firstChildPos) -1 else 1
+        }
         return if (mOrientation == HORIZONTAL) {
             PointF(direction.toFloat(), 0f)
         } else {
