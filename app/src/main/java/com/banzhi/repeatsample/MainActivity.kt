@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        bannerView.setPageIndicator(arrayOf(R.drawable.dot_selector, R.drawable.dot_selector))
+        bannerView.setIndicatorDrawable(R.drawable.dot_select, R.drawable.dot_unselect)
         bannerView.setPageIndicatorAlign(BannerView.IndicatorAlign.BOTTOM_RIGHT)
         bannerView.setBanners(TestCreator(), getDatas())
         bannerView.setOnItemClickListener(object : OnItemClickListener {

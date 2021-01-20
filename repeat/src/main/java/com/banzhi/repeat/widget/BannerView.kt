@@ -2,6 +2,8 @@ package com.banzhi.repeat.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
@@ -52,7 +54,10 @@ class BannerView : FrameLayout, LifecycleObserver {
      * 是否自动滚动
      */
     private var isAuto = false
-    private var indicators = arrayOf(2)
+    /**
+     * 指示器样式
+     */
+    private var indicatorDrawables = arrayOfNulls<Drawable>(2)
     /**
      * 获取当前位置
      *
@@ -237,10 +242,27 @@ class BannerView : FrameLayout, LifecycleObserver {
         initIndicator()
     }
 
-    fun setPageIndicator(indicators: Array<Int>) {
-        this.indicators = indicators
+    /**
+     * 设置指示器样式
+     */
+    fun setIndicatorDrawable(selectDrawableRes: Int, normalDrawableRes: Int) {
+        indicatorDrawables[0] = context.resources.getDrawable(selectDrawableRes)
+        indicatorDrawables[1] = context.resources.getDrawable(normalDrawableRes)
+
+
+    }
+    /**
+     * 设置指示器样式
+     */
+    fun setIndicatorDrawable(selectDrawable: Drawable, normalDrawale: Drawable) {
+        indicatorDrawables[0] = selectDrawable
+        indicatorDrawables[1] = normalDrawale
+
     }
 
+    /**
+     * 设置指示器位置
+     */
     fun setPageIndicatorAlign(align: IndicatorAlign) {
         val layoutParams = pointViews.layoutParams as LayoutParams
         when (align) {
@@ -267,8 +289,11 @@ class BannerView : FrameLayout, LifecycleObserver {
 
     }
 
+    /**
+     * 初始指示器
+     */
     private fun initIndicator() {
-        if (indicators.isNullOrEmpty()) {
+        if (indicatorDrawables.isNullOrEmpty()) {
             return
         }
         val count = mLayoutManager.itemCount
@@ -280,13 +305,23 @@ class BannerView : FrameLayout, LifecycleObserver {
             val params = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             params.setMargins(3, 0, 3, 0)
             pointView.layoutParams = params
-            pointView.buttonDrawable = context.resources.getDrawable(indicators[0])
+            pointView.buttonDrawable = buildDrawable()
+
             pointViews.addView(pointView, params)
         }
         setIndicatorSelect(currentPosition)
     }
 
+    private fun buildDrawable(): StateListDrawable {
+        val stateListDrawable = StateListDrawable()
+        stateListDrawable.addState(intArrayOf(android.R.attr.state_checked), indicatorDrawables[0])
+        stateListDrawable.addState(intArrayOf(-android.R.attr.state_checked), indicatorDrawables[1])
+        return stateListDrawable
+    }
+
     private fun setIndicatorSelect(index: Int) {
+        if (indicatorDrawables.isNullOrEmpty()) return
+        if (pointViews.childCount == 0) return
         (pointViews.getChildAt(index) as RadioButton).isChecked = true
     }
 
