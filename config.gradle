@@ -1,0 +1,32 @@
+ext {
+    android = [
+            applicationId    : "com.banzhi.repeat",
+            compileSdkVersion: 29,
+            buildToolsVersion: "29.0.3",
+            minSdkVersion    : 19,
+            targetSdkVersion : 29,
+            versionCode      : 1,
+            versionName      : "1.0.0"
+    ]
+
+    bintray = [
+            dcendents     : 'com.github.dcendents.android-maven',
+            bintray       : 'com.jfrog.bintray',
+
+            version       : android.versionName,
+
+            group         : android.applicationId, // Maven Group ID for the artifact，一般填你唯一的包名
+
+            siteUrl       : 'https://github.com/jiang-banzhi/repeatSample',   // 项目的主页
+            gitUrl        : 'https://github.com/jiang-banzhi/repeatSample.git',   // Git仓库的url
+
+            //developer
+            developerId   : 'jiangyang',      //填写的一些基本信息
+            developerName : 'banzhi',
+            developerEmail: 'jy494495991@gmail.com',
+
+            //bintray- pkg
+            bintrayRepo   : "maven",
+            bintrayName   : 'repeatLayoutManager',
+    ]
+}
