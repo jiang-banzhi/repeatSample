@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 //apply from: 'https://gist.githubusercontent.com/jiang-banzhi/f474047a8e824a829ac36aae408add95/raw/5e8a14713600924da90520a9734ee14ba3b69aed/mvn_push.gradle'
 apply plugin: 'com.github.dcendents.android-maven'
-group=rootProject.ext.android.applicationId
 android {
 
     compileSdkVersion rootProject.ext.android.compileSdkVersion
