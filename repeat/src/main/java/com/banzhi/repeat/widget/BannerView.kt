@@ -116,7 +116,7 @@ class BannerView : FrameLayout, LifecycleObserver {
         mRecyclerView = RecyclerView(context)
         mLayoutManager = RepeatLayoutManager(RecyclerView.HORIZONTAL)
         mRecyclerView.layoutManager = mLayoutManager
-        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         snapHelper = RepeatPagerSnapHelper()
         snapHelper.attachToRecyclerView(mRecyclerView)
         addView(mRecyclerView, params)
