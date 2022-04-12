@@ -236,6 +236,7 @@ class BannerView : FrameLayout, LifecycleObserver {
      *设置轮播数据
      */
     fun <T> setBanners(creator: HolderCreator<T>, datas: MutableList<T>) {
+        mLayoutManager.reset()
         val mAdapter = BannerAdapter(datas, creator)
         mRecyclerView.adapter = mAdapter
         setOnItemClickListener()

@@ -6,8 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import androidx.recyclerview.widget.RecyclerView.*
 import kotlin.math.abs
 
 /**
@@ -19,7 +18,8 @@ import kotlin.math.abs
  * @version :
  *</pre>
  */
-class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : RecyclerView.LayoutManager(),
+class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) :
+    RecyclerView.LayoutManager(),
     RecyclerView.SmoothScroller.ScrollVectorProvider {
 
 
@@ -29,8 +29,10 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
     private var mOrientation = HORIZONTAL
     private var mFillAnchor = 0
     private var canLoop = false
+
     //记录当次滚动的距离
     private var mLastScrollDelta: Int = 0
+
     //记录软键盘弹起、收回时的滚动距离
     private var mFixOffset: Int = 0
 
@@ -61,7 +63,10 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
     }
 
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
-        return RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT)
+        return RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.WRAP_CONTENT,
+            RecyclerView.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun canScrollHorizontally(): Boolean {
@@ -195,7 +200,10 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
                 }
             }
             Log.e("position=>", "mCurrentPosition==>${mCurrentPosition - 1}  ")
-            Log.e("layout=>${mCurrentPosition - 1}", "left=>$left top=>$top right=>$right bottom=>$bottom ")
+            Log.e(
+                "layout=>${mCurrentPosition - 1}",
+                "left=>$left top=>$top right=>$right bottom=>$bottom "
+            )
             layoutDecoratedWithMargins(itemView, left, top, right, bottom)
             if (isFillEnd) {
                 mFillAnchor += getOrientationWidth(itemView)
@@ -218,7 +226,11 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
     }
 
 
-    override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State): Int {
+    override fun scrollHorizontallyBy(
+        dx: Int,
+        recycler: RecyclerView.Recycler,
+        state: RecyclerView.State
+    ): Int {
         //填充view
         val consumed = fillScroll(dx, recycler, state)
         //移动view
@@ -231,7 +243,11 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
         return consumed
     }
 
-    override fun scrollVerticallyBy(dy: Int, recycler: RecyclerView.Recycler, state: RecyclerView.State): Int {
+    override fun scrollVerticallyBy(
+        dy: Int,
+        recycler: RecyclerView.Recycler,
+        state: RecyclerView.State
+    ): Int {
         //填充view
         val consumed = fillScroll(dy, recycler, state)
         //移动view
@@ -390,7 +406,11 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
         requestLayout()
     }
 
-    override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
+    override fun smoothScrollToPosition(
+        recyclerView: RecyclerView,
+        state: RecyclerView.State,
+        position: Int
+    ) {
         Log.e("bannerview", "$position<====$mPendingPosition")
         val linearSmoothScroller =
             LinearSmoothScroller(recyclerView.context)
@@ -432,5 +452,10 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) : Recycler
 
     private fun getEndPosition(): Int {
         return getPosition(getEndView())
+    }
+
+    fun reset() {
+        mStartPosition = NO_POSITION
+        mEndPosition = NO_POSITION
     }
 }

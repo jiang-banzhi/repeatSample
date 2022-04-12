@@ -34,11 +34,12 @@ class MainActivity : AppCompatActivity() {
         snapHelper.attachToRecyclerView(recyclerView)
         PagerSnapHelper().attachToRecyclerView(recyclerView0)
         btn.setOnClickListener {
-            val res = edit.text.toString()
-            recyclerView.smoothScrollToPosition(res.toInt())
-            recyclerView0.smoothScrollToPosition(res.toInt())
+//            val res = edit.text.toString()
+//            recyclerView.smoothScrollToPosition(res.toInt())
+//            recyclerView0.smoothScrollToPosition(res.toInt())
 //            layoutManager.scrollToPosition(res.toInt())
 //            layoutManager0.scrollToPosition(res.toInt())
+            update()
         }
         bannerView.setCanLoop(true)
         bannerView.startTurning(5000)
@@ -65,8 +66,18 @@ class MainActivity : AppCompatActivity() {
         lifecycle.addObserver(bannerView)
 
     }
+    private fun update(){
+        bannerView.setBanners(TestCreator(), getDatas2())
+    }
 
     private fun getDatas(): MutableList<String> {
+        val datas = mutableListOf<String>()
+        for (i in 0..1) {
+            datas.add("${i}pos")
+        }
+        return datas
+    }
+    private fun getDatas2(): MutableList<String> {
         val datas = mutableListOf<String>()
         for (i in 0..4) {
             datas.add("${i}pos")
