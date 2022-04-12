@@ -455,6 +455,7 @@ class RepeatLayoutManager(@RecyclerView.Orientation orientation: Int) :
     }
 
     fun reset() {
+        mLastScrollDelta = 0
         mStartPosition = NO_POSITION
         mEndPosition = NO_POSITION
     }

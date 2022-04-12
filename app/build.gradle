@@ -34,5 +34,5 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation project(path: ':repeat')
 //    implementation 'com.banzhi.repeat:repeat:2.0.0'
-//    implementation 'com.github.jiang-banzhi:repeatSample:2.0.0'
+//    implementation 'com.github.jiang-banzhi:repeatSample:2.0.3'
 }

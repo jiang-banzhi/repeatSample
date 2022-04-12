@@ -50,10 +50,12 @@ class BannerView : FrameLayout, LifecycleObserver {
     private lateinit var mLayoutManager: RepeatLayoutManager
     private lateinit var snapHelper: RepeatPagerSnapHelper
     private lateinit var pointViews: RadioGroup
+
     /**
      * 是否自动滚动
      */
     private var isAuto = false
+
     /**
      * 指示器样式
      */
@@ -81,6 +83,7 @@ class BannerView : FrameLayout, LifecycleObserver {
 
     private var onPageSelectListener: OnPageChangeListener? = null
     private var onItemClickListener: OnItemClickListener? = null
+
     @SuppressLint("HandlerLeak")
     private val mHandler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -104,7 +107,11 @@ class BannerView : FrameLayout, LifecycleObserver {
         init(context, attrs, -1)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(context, attrs, defStyleAttr)
     }
 
@@ -229,13 +236,18 @@ class BannerView : FrameLayout, LifecycleObserver {
     }
 
     private fun setOnItemClickListener() {
-        onItemClickListener?.let { (mRecyclerView.adapter as BannerAdapter<*>?)?.setOnItemClickListener(it) }
+        onItemClickListener?.let {
+            (mRecyclerView.adapter as BannerAdapter<*>?)?.setOnItemClickListener(
+                it
+            )
+        }
     }
 
     /**
      *设置轮播数据
      */
     fun <T> setBanners(creator: HolderCreator<T>, datas: MutableList<T>) {
+        currentPosition = 0
         mLayoutManager.reset()
         val mAdapter = BannerAdapter(datas, creator)
         mRecyclerView.adapter = mAdapter
@@ -252,6 +264,7 @@ class BannerView : FrameLayout, LifecycleObserver {
 
 
     }
+
     /**
      * 设置指示器样式
      */
@@ -301,6 +314,7 @@ class BannerView : FrameLayout, LifecycleObserver {
         if (count == 0) {
             return
         }
+        pointViews.removeAllViews()
         for (index in 0 until count) {
             val pointView = RadioButton(context)
             val params = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
