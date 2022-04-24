@@ -336,10 +336,14 @@ class BannerView : FrameLayout, LifecycleObserver {
     }
 
     private fun setIndicatorSelect(index: Int) {
-        Log.e("bannerview","setIndicatorSelect==$currentPosition")
+        Log.e("bannerview", "index==$index+setIndicatorSelect=currentPosition=$currentPosition")
         if (indicatorDrawables.isNullOrEmpty()) return
         if (pointViews.childCount == 0) return
         (pointViews.getChildAt(index) as RadioButton).isChecked = true
+        Log.e(
+            "bannerview",
+            "setIndicatorSelect=currentPosition=${(pointViews.getChildAt(index) as RadioButton).isChecked}"
+        )
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
