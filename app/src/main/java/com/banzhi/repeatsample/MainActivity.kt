@@ -72,9 +72,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun getDatas(): MutableList<String> {
         val datas = mutableListOf<String>()
-        for (i in 0..1) {
-            datas.add("${i}pos")
-        }
+//        for (i in 0..1) {
+//            datas.add("${i}pos")
+            datas.add("${0}pos")
+//        }
         return datas
     }
     private fun getDatas2(): MutableList<String> {

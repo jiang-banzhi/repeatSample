@@ -131,6 +131,7 @@ class BannerView : FrameLayout, LifecycleObserver {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == SCROLL_STATE_IDLE) {
+                    Log.e("BannerView", "onScrollStateChanged$currentPosition")
                     onPageSelectListener?.onPageSelect(currentPosition)
                     setIndicatorSelect(currentPosition)
                 }
@@ -178,9 +179,9 @@ class BannerView : FrameLayout, LifecycleObserver {
     fun setCurrentPosition(position: Int, smoothScroll: Boolean) {
         if (smoothScroll) {
             smoothScrollToPosition(position)
-        } else {
-            currentPosition = position
         }
+        currentPosition = position
+
     }
 
     /**
@@ -335,6 +336,7 @@ class BannerView : FrameLayout, LifecycleObserver {
     }
 
     private fun setIndicatorSelect(index: Int) {
+        Log.e("bannerview","setIndicatorSelect==$currentPosition")
         if (indicatorDrawables.isNullOrEmpty()) return
         if (pointViews.childCount == 0) return
         (pointViews.getChildAt(index) as RadioButton).isChecked = true
